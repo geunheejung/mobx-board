@@ -11,7 +11,7 @@ function Search() {
 
   return (
     <form onSubmit={handleSubmit} className="search-container">
-      <input type="text" value={value}/>
+      <input type="text" value={value} onChange={handleSubmit}/>
       <button type="submit">검색</button>
     </form>
   )
