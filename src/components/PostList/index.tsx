@@ -1,21 +1,19 @@
-import { mockData } from '../../data';
+import { observer } from 'mobx-react-lite'
+import {postModel} from "../../modlues/post";
 import Post from '../Post';
-import {useMemo} from "react";
 import './PostList.css';
 
-function PostList() {
-  const _postList = useMemo(() => {
-    return (
-      mockData.map((row, index) => (
-        <Post key={row.id} index={index} {...row} />
-      ))
-    )
-  }, [ mockData ])
+const PostList = observer(function PostList() {
+  const { postList } = postModel;
   return (
     <div className="post-list-container">
-      {_postList}
+      {
+        postList.map((row, index) => (
+          <Post key={row.id} index={index} {...row} />
+        ))
+      }
     </div>
   )
-}
+})
 
 export default PostList;
