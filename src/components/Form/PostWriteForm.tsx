@@ -1,7 +1,10 @@
 import {FormEvent, useCallback, useEffect, useRef, useState} from "react";
+import {postStore} from "../../modlues/post";
 import './PostWriteForm.css'
 
 function PostWriteForm() {
+  const { fetchCreatePost } = postStore;
+
   const titleInputRef = useRef<HTMLInputElement>(null)
   const contentTextareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -56,6 +59,8 @@ function PostWriteForm() {
       setError(error.message);
       return;
     }
+
+    fetchCreatePost({ title, content, user: 'BOB' });
   }, [title, content]);
 
   useEffect(() => {
@@ -67,6 +72,12 @@ function PostWriteForm() {
       <div className='title-input-field'>
         <label htmlFor="title">제목</label>
         <input type="text" id="title" onChange={handleTitleChange} ref={titleInputRef} />
+      </div>
+      <div className="user-info-input-field">
+        <label htmlFor="nickname">닉네임</label>
+        <input type="text" id="nickname" maxLength={5} />
+        <label htmlFor="password">비밀번호</label>
+        <input type="password" id="password" maxLength={8} autoComplete="on" />
       </div>
       <div className='content-textarea-field'>
         <textarea

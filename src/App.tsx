@@ -3,12 +3,13 @@ import PostList from './components/PostList';
 import Search from './components/Search';
 import Modal from './components/Modal';
 import PostWriteForm from './components/Form/PostWriteForm';
+import {postStore}  from './modlues/post';
 import "./App.css";
 
 function App() {
   return <div className="App">
   {/* 게시글 목록 */}
-    <PostList />
+    <PostList postStore={postStore} />
   {/* 게시글 검색 */}
     <Search />
   {/* 글쓰기 모달 */}

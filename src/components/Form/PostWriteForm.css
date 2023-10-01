@@ -30,6 +30,12 @@
     border: 1px solid #000;
 }
 
+.post-write-form-container .user-info-input-field {
+    display: flex;
+    gap: 10px;
+    margin: 0 0 20px 0;
+}
+
 .post-write-form-container .content-textarea-field {
     display: flex;
     margin: 0 0 10px 0;

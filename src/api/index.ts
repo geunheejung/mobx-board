@@ -2,17 +2,19 @@ import axios, {HttpStatusCode} from "axios";
 import {AxiosResponse} from "axios";
 
 export const instnace = axios.create({
-  baseURL: 'http://localhost:8080'
+  baseURL: 'http://localhost:3001'
 });
 
 export const URL = {
-  POST: '/post'
+  POST: '/posts'
 }
 
-export interface Response<T = any> {
-  data: T;
-  message: string;
-  status: typeof HttpStatusCode;
-}
+export const FETCH_STATE = {
+  PENDING: 'PENDING',
+  DONE: 'DONE',
+  ERROR: 'ERROR'
+} as const;
 
-export type ApiResponse<T = any> = AxiosResponse<Response<T>>
+export type FetchStateKeys = keyof typeof FETCH_STATE;
+
+export type ApiResponse<T = any> = AxiosResponse<T>

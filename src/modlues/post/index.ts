@@ -1,7 +1,6 @@
-import { makeObservable, makeAutoObservable, flow } from 'mobx';
-import {ApiResponse, URL, instnace} from "../../api";
-import { mockData } from '../../data'
-import {v4 as uuidv4} from "uuid";
+import {makeAutoObservable, flow} from 'mobx';
+import {ApiResponse, URL, instnace, FetchStateKeys, FETCH_STATE} from "../../api";
+import {PostListType} from "../../data";
 
 interface CreatePostPayload {
   title: string;
@@ -10,10 +9,27 @@ interface CreatePostPayload {
 }
 
 export class PostStore {
+  postList: PostListType = [];
+  fetchState: FetchStateKeys = FETCH_STATE.PENDING
+
   constructor() {
-    makeObservable(this, {
-      fetchCreatePost: flow
-    }, { autoBind: true })
+    makeAutoObservable(this, {
+      fetctGetPosts: flow.bound,
+      fetchCreatePost: flow.bound,
+    })
+  }
+
+  *fetctGetPosts() {
+    this.postList = [];
+    this.fetchState = FETCH_STATE.PENDING;
+    try {
+      const response: ApiResponse<PostListType> = yield instnace.get(URL.POST);
+      console.log(response.data);
+      this.postList = response.data;
+      this.fetchState = FETCH_STATE.DONE;
+    } catch (error) {
+      this.fetchState = FETCH_STATE.ERROR;
+    }
   }
 
   *fetchCreatePost(payload: CreatePostPayload) {
@@ -21,13 +37,6 @@ export class PostStore {
   }
 }
 
-export class PostModel {
-  postList = mockData;
-
-  constructor() {
-    makeAutoObservable(this);
-  }
-}
-
 export const postStore = new PostStore();
-export const postModel = new PostModel();
+
+console.log('postStore.postList ->', postStore.postList);
