@@ -69,10 +69,17 @@ function PostWriteForm() {
         <input type="text" id="title" onChange={handleTitleChange} ref={titleInputRef} />
       </div>
       <div className='content-textarea-field'>
-        <textarea name="content" id="contentTextArea" cols={30} rows={10} onChange={handleContentChange}
-                  ref={contentTextareaRef}
+        <textarea
+          name="content"
+          id="contentTextArea"
+          cols={30}
+          rows={10}
+          onChange={handleContentChange}
+          ref={contentTextareaRef}
         />
       </div>
+      <p className="error-text-container"><strong>{error}</strong></p>
+      <button type='submit' className="submit-button">작성</button>
     </form>
   )
 }
