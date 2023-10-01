@@ -1,0 +1,29 @@
+.post-write-form-container {
+    display: grid;
+    grid-template-rows: 50px 1fr;
+    gap: 20px;
+    padding: 24px;
+    min-height: 500px;
+}
+
+.post-write-form-container .title-input-field {
+    display: flex;
+    gap: 20px;
+}
+
+.post-write-form-container .title-input-field label {
+
+}
+
+.post-write-form-container .title-input-field input {
+    flex: 1;
+    border: 1px solid #000;
+}
+
+.post-write-form-container .content-textarea-field {
+    display: flex;
+}
+
+.post-write-form-container .content-textarea-field textarea {
+    flex: 1;
+}
