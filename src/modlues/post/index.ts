@@ -10,14 +10,21 @@ interface CreatePostPayload {
   user: string;
 }
 
+interface SearchPostPayload {
+  keyword: string;
+}
+
 export class PostStore {
   postList: PostListType = [];
-  fetchState: FetchStateKeys = FETCH_STATE.PENDING
+  filteredList: PostListType = [];
+  fetchState: FetchStateKeys = FETCH_STATE.PENDING;
+  fetchSearchState: FetchStateKeys = FETCH_STATE.PENDING;
 
   constructor() {
     makeAutoObservable(this, {
       fetctGetPosts: flow.bound,
       fetchCreatePost: flow.bound,
+      fetchSearchPost: flow.bound,
     })
   }
 
@@ -47,7 +54,32 @@ export class PostStore {
       this.fetchState = FETCH_STATE.ERROR;
       throw error;
     }
+  }
 
+  *fetchSearchPost(payload: SearchPostPayload) {
+    const { keyword } = payload;
+
+    const params = { title_like: payload.keyword, }
+    this.filteredList = [];
+
+    if (!keyword) {
+      return;
+    }
+
+    this.fetchSearchState = FETCH_STATE.PENDING;
+    try {
+      const response: ApiResponse<PostListType> = yield instnace.get(
+        URL.POST,
+        { params }
+      );
+      this.filteredList = response.data;
+      this.fetchSearchState = FETCH_STATE.DONE;
+      return response;
+    } catch (error: unknown) {
+      console.error(error);
+      this.fetchSearchState = FETCH_STATE.ERROR;
+      throw error;
+    }
   }
 }
 

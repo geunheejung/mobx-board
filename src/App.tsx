@@ -14,15 +14,15 @@ function App() {
 
 
   return <div className="App">
-  {/* 게시글 목록 */}
-    <PostList postStore={postStore} />
-    <button onClick={toggleModal}>글 쓰기</button>
+    {/* 글쓰기 모달 */}
     <Modal defaultIsOpen={isOpen} onClose={toggleModal}>
       <PostWriteForm afterSubmit={toggleModal} postStore={postStore} />
     </Modal>
-  {/* 게시글 검색 */}
-    <Search />
-  {/* 글쓰기 모달 */}
+    {/* 게시글 검색 */}
+    <Search postStore={postStore} />
+    {/* 게시글 목록 */}
+    <PostList postStore={postStore} />
+    <button onClick={toggleModal}>글 쓰기</button>
 
 
   </div>;

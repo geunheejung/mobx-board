@@ -38,3 +38,27 @@ input, textarea {
   border: 1px solid lightslategrey;
   outline: none;
 }
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.list-container {
+  display: flex;
+  flex-direction: column;
+  color: lightslategrey;
+}
+
+.list-container .list-item {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  transition: .5s;
+}
+
+.list-container .list-item:hover {
+  color: lightcoral;
+  transition: .5s;
+}
