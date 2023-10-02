@@ -1,4 +1,6 @@
 import {makeAutoObservable, flow} from 'mobx';
+import { v4 as uuidv4 } from 'uuid';
+import {AxiosError, isAxiosError} from 'axios';
 import {ApiResponse, URL, instnace, FetchStateKeys, FETCH_STATE} from "../../api";
 import {PostListType} from "../../data";
 
@@ -28,12 +30,24 @@ export class PostStore {
       this.postList = response.data;
       this.fetchState = FETCH_STATE.DONE;
     } catch (error) {
+      console.error(error);
       this.fetchState = FETCH_STATE.ERROR;
+      throw error;
     }
   }
 
   *fetchCreatePost(payload: CreatePostPayload) {
-    const response: ApiResponse = yield instnace.post(URL.POST, payload);
+    this.fetchState = FETCH_STATE.PENDING;
+    try {
+      const response: ApiResponse = yield instnace.post(URL.POST, { id: uuidv4(), ...payload });
+      this.fetchState = FETCH_STATE.DONE;
+      return response;
+    } catch (error: unknown) {
+      console.error(error);
+      this.fetchState = FETCH_STATE.ERROR;
+      throw error;
+    }
+
   }
 }
 

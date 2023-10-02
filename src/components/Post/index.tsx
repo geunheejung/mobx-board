@@ -1,4 +1,5 @@
 import './Post.css';
+import {observer} from "mobx-react-lite";
 
 interface Props {
   index: number;
@@ -8,7 +9,7 @@ interface Props {
   user: string;
 }
 
-function Post({ title, user, index }: Props) {
+const Post = observer(function Post({ title, user, index }: Props) {
   return (
     <div className="post-item-container">
       <span>{index}</span>
@@ -16,6 +17,6 @@ function Post({ title, user, index }: Props) {
       <span>{user}</span>
     </div>
   )
-}
+});
 
 export default Post;

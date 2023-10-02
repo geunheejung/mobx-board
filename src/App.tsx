@@ -13,7 +13,7 @@ function App() {
   {/* 게시글 검색 */}
     <Search />
   {/* 글쓰기 모달 */}
-    <PostWriteForm />
+    <PostWriteForm postStore={postStore} />
     {/*<Modal>*/}
     {/*  <PostWriteForm />*/}
     {/*</Modal>*/}

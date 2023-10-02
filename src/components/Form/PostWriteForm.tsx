@@ -1,9 +1,10 @@
 import {FormEvent, useCallback, useEffect, useRef, useState} from "react";
-import {postStore} from "../../modlues/post";
+import {PostStore} from "../../modlues/post";
 import './PostWriteForm.css'
+import {observer} from "mobx-react-lite";
 
-function PostWriteForm() {
-  const { fetchCreatePost } = postStore;
+const PostWriteForm = observer(function PostWriteForm({ postStore }: { postStore: PostStore }) {
+ const { fetchCreatePost, fetctGetPosts } = postStore;
 
   const titleInputRef = useRef<HTMLInputElement>(null)
   const contentTextareaRef = useRef<HTMLTextAreaElement>(null)
@@ -38,7 +39,19 @@ function PostWriteForm() {
     }
 
     return;
-  }, [ title, content ])
+  }, [ title, content ]);
+
+
+  const createPostFlow = useCallback(async () => {
+    try {
+      await fetchCreatePost({ title, content, user: 'BOB' })
+      await fetctGetPosts();
+    } catch (error) {
+      console.error(error);
+      setError('다시 시도 해주세요');
+    }
+
+  }, [title, content]);
 
   const handleTitleChange = useCallback((e:  React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim();
@@ -59,8 +72,7 @@ function PostWriteForm() {
       setError(error.message);
       return;
     }
-
-    fetchCreatePost({ title, content, user: 'BOB' });
+    createPostFlow();
   }, [title, content]);
 
   useEffect(() => {
@@ -93,6 +105,6 @@ function PostWriteForm() {
       <button type='submit' className="submit-button">작성</button>
     </form>
   )
-}
+})
 
 export default PostWriteForm;
