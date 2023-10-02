@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import PostList from './components/PostList';
 import Search from './components/Search';
 import Modal from './components/Modal';
@@ -12,7 +12,6 @@ function App() {
     setIsOpen(prev => !prev);
   }, [isOpen])
 
-
   return <div className="App">
     {/* 글쓰기 모달 */}
     <Modal defaultIsOpen={isOpen} onClose={toggleModal}>
@@ -21,7 +20,7 @@ function App() {
     {/* 게시글 검색 */}
     <Search postStore={postStore} />
     {/* 게시글 목록 */}
-    <PostList postStore={postStore} />
+    <PostList />
     <button onClick={toggleModal}>글 쓰기</button>
 
 

@@ -2,7 +2,7 @@ import {useCallback, useEffect, useRef, useState} from "react";
 import {observer} from "mobx-react-lite";
 import {PostStore} from "../../modlues/post";
 import './Search.css'
-import {Post} from "../../data";
+import {IPost} from "../../data";
 
 interface Props {
   postStore: PostStore
@@ -14,7 +14,7 @@ const Search = observer(function Search({ postStore }: Props) {
 
   const { filteredList, fetchSearchPost } = postStore;
 
-  const [detailItem, setDetailItem] = useState<Post | null>();
+  const [detailItem, setDetailItem] = useState<IPost | null>();
   const [value, setValue] = useState('');
   const [isSearch, setIsSearch] = useState(false);
 
@@ -40,7 +40,7 @@ const Search = observer(function Search({ postStore }: Props) {
     // setIsSearch(false)
   }, []);
 
-  const handleItemClick = useCallback((post: Post) => {
+  const handleItemClick = useCallback((post: IPost) => {
     // 클릭 시 상세 게시글로 이동 해야 함.
     setDetailItem(post);
     setValue(post.title);

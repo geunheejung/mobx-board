@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import PostStoreContext from './context/PostStoreContext';
 import reportWebVitals from './reportWebVitals';
+import postRootStore from './modlues/post/postRootStore';
 import './reset.css';
 import './index.css';
 
@@ -10,7 +12,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <PostStoreContext.Provider value={postRootStore}>
+      <App />
+    </PostStoreContext.Provider>
   </React.StrictMode>
 );
 

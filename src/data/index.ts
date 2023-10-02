@@ -1,8 +1,8 @@
-export interface Post {
+export interface IPost {
   id: string;
   title: string;
   content: string;
   user: string;
 }
 
-export type PostListType = Post[];
+export type PostListType = IPost[];
