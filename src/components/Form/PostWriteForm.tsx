@@ -3,7 +3,12 @@ import {PostStore} from "../../modlues/post";
 import './PostWriteForm.css'
 import {observer} from "mobx-react-lite";
 
-const PostWriteForm = observer(function PostWriteForm({ postStore }: { postStore: PostStore }) {
+interface Props {
+  postStore: PostStore;
+  afterSubmit?: () => void;
+}
+
+const PostWriteForm = observer(function PostWriteForm({ postStore, afterSubmit }: Props) {
  const { fetchCreatePost, fetctGetPosts } = postStore;
 
   const titleInputRef = useRef<HTMLInputElement>(null)
@@ -41,11 +46,18 @@ const PostWriteForm = observer(function PostWriteForm({ postStore }: { postStore
     return;
   }, [ title, content ]);
 
+  const cleanup = useCallback(() => {
+    setTitle('');
+    setContent('');
+    afterSubmit && afterSubmit();
+  }, []);
 
   const createPostFlow = useCallback(async () => {
     try {
       await fetchCreatePost({ title, content, user: 'BOB' })
       await fetctGetPosts();
+
+      cleanup();
     } catch (error) {
       console.error(error);
       setError('다시 시도 해주세요');
@@ -83,16 +95,12 @@ const PostWriteForm = observer(function PostWriteForm({ postStore }: { postStore
     <form onSubmit={handleSubmit} className='post-write-form-container'>
       <div className='title-input-field'>
         <label htmlFor="title">제목</label>
-        <input type="text" id="title" onChange={handleTitleChange} ref={titleInputRef} />
+        <input type="text" id="title" value={title} onChange={handleTitleChange} ref={titleInputRef} />
       </div>
-      <div className="user-info-input-field">
-        <label htmlFor="nickname">닉네임</label>
-        <input type="text" id="nickname" maxLength={5} />
-        <label htmlFor="password">비밀번호</label>
-        <input type="password" id="password" maxLength={8} autoComplete="on" />
-      </div>
+
       <div className='content-textarea-field'>
         <textarea
+          value={content}
           name="content"
           id="contentTextArea"
           cols={30}

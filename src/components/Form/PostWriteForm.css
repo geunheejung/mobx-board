@@ -4,7 +4,6 @@
     display: flex;
     flex-direction: column;
     padding: 24px;
-    height: 500px;
     max-height: 500px;
 }
 
@@ -27,7 +26,6 @@
 
 .post-write-form-container .title-input-field input {
     flex: 1;
-    border: 1px solid #000;
 }
 
 .post-write-form-container .user-info-input-field {

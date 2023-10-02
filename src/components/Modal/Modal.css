@@ -1,0 +1,30 @@
+.modal-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+}
+
+.modal-container.--hide {
+    display: none;
+}
+
+.modal-container .inner-modal-container {
+    position: relative;
+    border: 1px solid lightslategrey;
+    width: 500px;
+    padding: 20px;
+    background: #fff;
+}
+
+.modal-container .inner-modal-container .close-button {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
