@@ -13,10 +13,11 @@ export class PostListStore {
 
   constructor(transportLayer: TransPortLayerType, userStore: UserStoreType) {
     makeAutoObservable(this, {
+      postList: observable,
       createPost: action.bound,
+      removePost: action.bound,
       updatePostFromServer: action.bound,
       loadPostList: flow.bound,
-      postList: observable.deep
     });
     this.userStore = userStore;
     this.transportLayer = transportLayer;
@@ -53,7 +54,7 @@ export class PostListStore {
   createPost() {
     const post = new Post(this);
     this.postList.push(post);
-    // this.loadPostList()
+    this.loadPostList();
     return post;
   }
 
@@ -61,6 +62,7 @@ export class PostListStore {
   removePost(post: Post) {
     this.postList.splice(this.postList.indexOf(post), 1);
     post.dispose();
+    this.loadPostList();
   }
 }
 

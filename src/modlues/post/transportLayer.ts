@@ -1,5 +1,5 @@
-import {instnace} from "../../api";
-import {IPost, PostListType} from "../../data";
+import {posts} from "../../api";
+import {IPost} from "../../data";
 
 export class TransPortLayer {
   url = {
@@ -9,19 +9,14 @@ export class TransPortLayer {
   constructor() {}
 
   fetchPostList() {
-    return instnace.get<PostListType>(this.url.post)
+    return posts.get();
   }
 
   savePost(json: IPost) {
-    return instnace.post(this.url.post, {
-      id: json.id,
-      title: json.title,
-      content: json.content,
-      user: json.user
-    });
+    return posts.post(json);
   }
   deletePost(id: string) {
-    console.log(id + '삭제 대상')
+    return posts.delete(id);
   }
 }
 
