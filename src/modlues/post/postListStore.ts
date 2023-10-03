@@ -1,7 +1,7 @@
-import {action, flow, makeAutoObservable, observable, runInAction} from "mobx";
+import {action, computed, flow, makeAutoObservable, observable, runInAction} from "mobx";
 import {AxiosResponse} from "axios";
 import {IPost, PostListType } from "../../data";
-import {PostRooteStoreType, PostStoreListType, TransPortLayerType, UserStoreType} from './type';
+import {PostStoreListType, TransPortLayerType, UserStoreType} from './type';
 import {FETCH_STATE, FetchStateKeys} from "../../api";
 import {Post} from "./postStore";
 
@@ -10,6 +10,7 @@ export class PostListStore {
   transportLayer: TransPortLayerType;
   postList: PostStoreListType = [];
   fetchState: FetchStateKeys = FETCH_STATE.PENDING;
+  searchKeyword = '';
 
   constructor(transportLayer: TransPortLayerType, userStore: UserStoreType) {
     makeAutoObservable(this, {
@@ -18,11 +19,17 @@ export class PostListStore {
       removePost: action.bound,
       updatePostFromServer: action.bound,
       loadPostList: flow.bound,
+      filteredPostList: computed,
     });
     this.userStore = userStore;
     this.transportLayer = transportLayer;
 
     this.loadPostList();
+  }
+
+  get filteredPostList() {
+    if (!this.searchKeyword) return [];
+    return this.postList.filter(row => row.title.includes(this.searchKeyword));
   }
 
   *loadPostList() {
@@ -64,6 +71,8 @@ export class PostListStore {
     post.dispose();
     this.loadPostList();
   }
+
+  setSearchKeyword = (keyword: string) => this.searchKeyword = keyword;
 }
 
 

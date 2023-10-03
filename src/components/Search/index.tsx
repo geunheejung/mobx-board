@@ -1,89 +1,87 @@
-import {useCallback, useEffect, useRef, useState} from "react";
+import {useCallback, useContext, useEffect, useRef, useState} from "react";
 import {observer} from "mobx-react-lite";
-import {PostStore} from "../../modlues/post";
-import './Search.css'
 import {IPost} from "../../data";
+import {PostStoreContext} from "../../index";
+import './Search.css'
+import {debug} from "util";
 
-interface Props {
-  postStore: PostStore
-}
 
-const Search = observer(function Search({ postStore }: Props) {
-  const containerRef = useRef<HTMLDivElement>(null)
+const Search = observer(function Search() {
+  const inputRef = useRef<HTMLInputElement>(null)
   const resultRef = useRef<HTMLDivElement>(null)
 
-  const { filteredList, fetchSearchPost } = postStore;
+  const { postStore } = useContext(PostStoreContext)
 
   const [detailItem, setDetailItem] = useState<IPost | null>();
-  const [value, setValue] = useState('');
   const [isSearch, setIsSearch] = useState(false);
 
-  const searchFlow = useCallback(async (value: string) => {
-    await fetchSearchPost({ keyword: value });
-  }, [value])
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   }
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setValue(value)
-    searchFlow(value)
-  }, [value]);
+    if (isSearch === false) setIsSearch(true);
+    postStore.setSearchKeyword(e.target.value);
+  }, []);
 
   const handleFocus = useCallback(() => {
     setIsSearch(true);
   }, []);
 
-  const handleBlur = useCallback(() => {
-    // setIsSearch(false)
-  }, []);
 
   const handleItemClick = useCallback((post: IPost) => {
-    // 클릭 시 상세 게시글로 이동 해야 함.
     setDetailItem(post);
-    setValue(post.title);
+    postStore.setSearchKeyword('')
     setIsSearch(false);
   }, []);
 
-  // useEffect(() => {
-  //   const listener = (e: MouseEvent) => {
-  //     if (containerRef.current && resultRef.current) {
-  //       if (e.target) {
-  //         const { className } = e.target as HTMLElement;
-  //
-  //         if (
-  //           containerRef.current.className.includes(className) ||
-  //           resultRef.current.className.includes(className)
-  //         ) {
-  //           return;
-  //         }
-  //
-  //         setIsSearch(false);
-  //       }
-  //     }
-  //   }
-  //   window.addEventListener('click', listener);
-  //
-  //   return () => {
-  //     window.removeEventListener('click', listener);
-  //   }
-  // }, []);
+  const handleKeyDown = useCallback((e:  React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.code === 'Enter') {
+      setIsSearch(false)
+    }
+  }, []);
+
+  useEffect(() => {
+    const listener = ({ target }: MouseEvent) => {
+      if (!isSearch) return;
+
+      if (target === resultRef.current || target === inputRef.current){
+        return;
+      }
+
+      setIsSearch(false);
+    }
+    window.addEventListener('click', listener)
+
+    return () => {
+      window.removeEventListener('click', listener);
+    }
+  }, []);
 
   return (
-    <div className='search-container' ref={containerRef}>
+    <div className='search-container'>
       <form onSubmit={handleSubmit} className='search-input-field'>
 
-        <input type="text" value={value} onChange={handleChange} placeholder="Search..." onFocus={handleFocus} onBlur={handleBlur} />
+        <input
+          type="text"
+          value={postStore.searchKeyword}
+          onChange={handleChange}
+          placeholder="Search..."
+          onClick={handleFocus}
+          onKeyDown={handleKeyDown}
+          ref={inputRef}
+        />
         <button type="submit">검색</button>
-
       </form>
-      {/* input이 활성화 되어 있으면 열리도록 */}
-      <div className={`search-result-container --${isSearch ? 'show' : 'hide'}`} ref={resultRef}>
-        <ul className="list-container">
-        {filteredList.map(row => (
-          <li key={row.id} className="list-item">
+      <div
+        className={`search-result-container --${isSearch ? 'show' : 'hide'}`}
+        ref={resultRef}
+      >
+        <ul className="list-container" >
+
+        {postStore.filteredPostList.map(row => (
+          <li key={row.id} className="list-item" >
             <a href="#" onClick={() => handleItemClick(row)}>
             {row.title}
             {row.content}
