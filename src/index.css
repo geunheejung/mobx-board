@@ -45,15 +45,20 @@ a {
 }
 
 .list-container {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(200px, auto));
+  gap: 20px;
   color: lightslategrey;
 }
 
 .list-container .list-item {
+  box-sizing: border-box;
+  border: 1px solid lightslategrey;
   cursor: pointer;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  height: 200px;
+  justify-content: space-around;
   padding: 10px;
   transition: .5s;
 }
@@ -61,4 +66,18 @@ a {
 .list-container .list-item:hover {
   color: lightcoral;
   transition: .5s;
+}
+
+.list-container .list-item .title {
+  font-size: 1.5rem;
+}
+
+.list-container .list-item .content {
+  /* 내용이 늘어날 수 있으며, 여백은 유지 되어야 함. */
+  padding: 20px 10px;
+  font-size: 1.1rem;
+}
+
+.list-container .list-item .meta {
+  font-size: .8rem;
 }

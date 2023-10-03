@@ -20,11 +20,15 @@ const PostList = observer(function PostList() {
 
   return (
     <div className="post-list-container">
+      <ul className="list-container">
       {
         postStore.postList.map((row, index) => (
-          <Post key={row.id} index={index} row={row} />
+          <li key={row.id} className="list-item">
+            <Post index={index} row={row} />
+          </li>
         ))
       }
+      </ul>
     </div>
   )
 })

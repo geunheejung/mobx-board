@@ -16,14 +16,14 @@ const Post = observer(function Post({ index, row }: Props) {
     removePost(row);
   }, []);
 
-  const { title, user } = row;
+  const { title, user, content } = row;
   return (
-    <div className="post-item-container">
-      <span>{index}</span>
-      <span>{title}</span>
-      <span>{user}</span>
+    <>
+      <h1 className="title">{title}</h1>
+      <p className="content">{content}</p>
+      <p className="meta">작성자 : {user}</p>
       <button onClick={handleRemove}>삭제하기</button>
-    </div>
+    </>
   )
 });
 
