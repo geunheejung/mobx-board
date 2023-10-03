@@ -26,8 +26,8 @@ const Search = observer(function Search({ postStore }: Props) {
     e.preventDefault();
   }
 
-  const handleChange = useCallback((e:  React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.trim();
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
     setValue(value)
     searchFlow(value)
   }, [value]);
@@ -47,24 +47,29 @@ const Search = observer(function Search({ postStore }: Props) {
     setIsSearch(false);
   }, []);
 
-  useEffect(() => {
-    window.addEventListener('click', (e: MouseEvent) => {
-      if (containerRef.current && resultRef.current) {
-        if (e.target) {
-          const { className } = e.target as HTMLElement;
-
-          if (
-            containerRef.current.className.includes(className) ||
-            resultRef.current.className.includes(className)
-          ) {
-            return;
-          }
-
-          setIsSearch(false);
-        }
-      }
-    })
-  }, []);
+  // useEffect(() => {
+  //   const listener = (e: MouseEvent) => {
+  //     if (containerRef.current && resultRef.current) {
+  //       if (e.target) {
+  //         const { className } = e.target as HTMLElement;
+  //
+  //         if (
+  //           containerRef.current.className.includes(className) ||
+  //           resultRef.current.className.includes(className)
+  //         ) {
+  //           return;
+  //         }
+  //
+  //         setIsSearch(false);
+  //       }
+  //     }
+  //   }
+  //   window.addEventListener('click', listener);
+  //
+  //   return () => {
+  //     window.removeEventListener('click', listener);
+  //   }
+  // }, []);
 
   return (
     <div className='search-container' ref={containerRef}>

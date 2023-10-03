@@ -1,15 +1,17 @@
-import React from 'react';
+import React, {createContext} from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import PostStoreContext from './context/PostStoreContext';
 import reportWebVitals from './reportWebVitals';
-import postRootStore from './modlues/post/postRootStore';
+import postRootStore, {PostRootStore} from './modlues/post/postRootStore';
 import './reset.css';
 import './index.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+export const PostStoreContext = createContext<PostRootStore>(postRootStore);
+
 root.render(
   <React.StrictMode>
     <PostStoreContext.Provider value={postRootStore}>

@@ -5,12 +5,13 @@ const override: CSSProperties = {
   display: 'block',
   margin: '0 auto',
   borderColor: 'red',
+  color: 'red'
 }
 
 const Spinner = () => {
   return (
     <CircleLoader
-      color={'#fff'}
+      color={'red'}
       cssOverride={override}
       aria-label="Loading Spinner"
       data-testid="loader"

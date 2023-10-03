@@ -1,15 +1,14 @@
-import {FormEvent, useCallback, useEffect, useRef, useState} from "react";
-import {PostStore} from "../../modlues/post";
-import './PostWriteForm.css'
+import {FormEvent, useCallback, useContext, useEffect, useRef, useState} from "react";
 import {observer} from "mobx-react-lite";
+import {PostStoreContext} from "../../index";
+import './PostWriteForm.css'
 
 interface Props {
-  postStore: PostStore;
   afterSubmit?: () => void;
 }
 
-const PostWriteForm = observer(function PostWriteForm({ postStore, afterSubmit }: Props) {
- const { fetchCreatePost, fetctGetPosts } = postStore;
+const PostWriteForm = observer(function PostWriteForm({ afterSubmit }: Props) {
+ const { postStore } = useContext(PostStoreContext)
 
   const titleInputRef = useRef<HTMLInputElement>(null)
   const contentTextareaRef = useRef<HTMLTextAreaElement>(null)
@@ -54,8 +53,8 @@ const PostWriteForm = observer(function PostWriteForm({ postStore, afterSubmit }
 
   const createPostFlow = useCallback(async () => {
     try {
-      await fetchCreatePost({ title, content, user: 'BOB' })
-      await fetctGetPosts();
+      const newPost = postStore.createPost();
+      newPost.updateFromJson({ title, content, user: 'BOB' });
 
       cleanup();
     } catch (error) {
@@ -66,12 +65,12 @@ const PostWriteForm = observer(function PostWriteForm({ postStore, afterSubmit }
   }, [title, content]);
 
   const handleTitleChange = useCallback((e:  React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.trim();
+    const value = e.target.value
     setTitle(value)
   }, [title]);
 
   const handleContentChange = useCallback((e:  React.ChangeEvent<HTMLTextAreaElement>) => {
-    const value = e.target.value.trim();
+    const value = e.target.value
     setContent(value);
   }, [content]);
 

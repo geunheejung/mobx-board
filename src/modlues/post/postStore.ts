@@ -12,7 +12,7 @@ export class Post {
   autoSave = true; // Post의 변경사항을 서버에 제출하기 위한 표시
   saveHandler: () => void; // post를 자동저장하는 사이드이펙트의 Disposer;
 
-  constructor(store: any, id = uuidV4()) {
+  constructor(store: PostListStoreType, id = uuidV4()) {
     makeAutoObservable(this, {
       id: false,
       title: false,
@@ -20,7 +20,7 @@ export class Post {
       store: false,
       autoSave: false,
       saveHandler: false,
-      dispose: false
+      dispose: false,
     });
 
     this.store = store;
@@ -50,7 +50,7 @@ export class Post {
     }
   }
 
-  updateFromJson(json: IPost) {
+  updateFromJson(json: Omit<IPost, 'id'>) {
     this.autoSave = false; // 변경 사항을 서버로 다시 보내는 것을 방지합니다.
     this.title = json.title;
     this.content = json.content;

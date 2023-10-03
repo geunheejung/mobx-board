@@ -8,10 +8,8 @@ export class PostRootStore {
 
   constructor() {
     this.userStore = new UserStore(this);
-    this.postStore = new PostListStore(this, new TransPortLayer());
+    this.postStore = new PostListStore(new TransPortLayer(), new UserStore(this));
   }
 }
 
-const rootStore = new PostRootStore();
-
-export default rootStore;
+export default new PostRootStore();

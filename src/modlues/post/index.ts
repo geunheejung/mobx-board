@@ -33,7 +33,6 @@ export class PostStore {
     this.fetchState = FETCH_STATE.PENDING;
     try {
       const response: ApiResponse<PostListType> = yield instnace.get(URL.POST);
-      console.log(response.data);
       this.postList = response.data;
       this.fetchState = FETCH_STATE.DONE;
     } catch (error) {
@@ -84,5 +83,3 @@ export class PostStore {
 }
 
 export const postStore = new PostStore();
-
-console.log('postStore.postList ->', postStore.postList);

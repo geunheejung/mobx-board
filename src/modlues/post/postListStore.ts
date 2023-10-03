@@ -1,4 +1,4 @@
-import {makeAutoObservable, runInAction} from "mobx";
+import {action, flow, makeAutoObservable, observable, runInAction} from "mobx";
 import {AxiosResponse} from "axios";
 import {IPost, PostListType } from "../../data";
 import {PostRooteStoreType, PostStoreListType, TransPortLayerType, UserStoreType} from './type';
@@ -11,9 +11,14 @@ export class PostListStore {
   postList: PostStoreListType = [];
   fetchState: FetchStateKeys = FETCH_STATE.PENDING;
 
-  constructor(rootStore: PostRooteStoreType, transportLayer: TransPortLayerType) {
-    makeAutoObservable(this);
-    this.userStore = rootStore.userStore;
+  constructor(transportLayer: TransPortLayerType, userStore: UserStoreType) {
+    makeAutoObservable(this, {
+      createPost: action.bound,
+      updatePostFromServer: action.bound,
+      loadPostList: flow.bound,
+      postList: observable.deep
+    });
+    this.userStore = userStore;
     this.transportLayer = transportLayer;
 
     this.loadPostList();
@@ -23,8 +28,10 @@ export class PostListStore {
     this.fetchState = FETCH_STATE.PENDING;
     try {
       const res: AxiosResponse<PostListType> = yield this.transportLayer.fetchPostList();
-      res.data.forEach(json => this.updatePostFromServer(json))
-      this.fetchState = FETCH_STATE.DONE;
+      runInAction(() => {
+        res.data.forEach(json => this.updatePostFromServer(json))
+        this.fetchState = FETCH_STATE.DONE;
+      });
     } catch (error) {
       this.fetchState = FETCH_STATE.ERROR;
     }
@@ -46,12 +53,14 @@ export class PostListStore {
   createPost() {
     const post = new Post(this);
     this.postList.push(post);
+    // this.loadPostList()
     return post;
   }
 
   // Post가 어떻게든 삭제되었을 때 클라이언트 메모리에서 삭제한다.
   removePost(post: Post) {
-
+    this.postList.splice(this.postList.indexOf(post), 1);
+    post.dispose();
   }
 }
 

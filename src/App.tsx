@@ -1,12 +1,13 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useContext, useEffect, useState} from "react";
 import PostList from './components/PostList';
 import Search from './components/Search';
 import Modal from './components/Modal';
 import PostWriteForm from './components/Form/PostWriteForm';
-import {postStore}  from './modlues/post';
 import "./App.css";
+import {observer} from "mobx-react-lite";
+import {PostRooteStoreType} from "./modlues/post/type";
 
-function App() {
+const App = observer(function App() {
   const [ isOpen, setIsOpen ] = useState(false);
   const toggleModal = useCallback(() => {
     setIsOpen(prev => !prev);
@@ -15,16 +16,16 @@ function App() {
   return <div className="App">
     {/* 글쓰기 모달 */}
     <Modal defaultIsOpen={isOpen} onClose={toggleModal}>
-      <PostWriteForm afterSubmit={toggleModal} postStore={postStore} />
+      <PostWriteForm afterSubmit={toggleModal} />
     </Modal>
     {/* 게시글 검색 */}
-    <Search postStore={postStore} />
+    {/*<Search postStore={postStore} />*/}
     {/* 게시글 목록 */}
     <PostList />
     <button onClick={toggleModal}>글 쓰기</button>
 
 
   </div>;
-}
+});
 
 export default App;
