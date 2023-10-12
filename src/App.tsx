@@ -21,9 +21,8 @@ const App = observer(function App() {
     <Search />
     {/* 게시글 목록 */}
     <PostList />
-    <button onClick={toggleModal}>글 쓰기</button>
-
-
+    
+    <button onClick={toggleModal} style={{ position: 'sticky', bottom: 4 }}>글 쓰기</button>
   </div>;
 });
 

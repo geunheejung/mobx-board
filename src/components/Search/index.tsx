@@ -44,11 +44,11 @@ const Search = observer(function Search() {
 
   useEffect(() => {
     const listener = ({ target }: MouseEvent) => {
-      if (!isSearch) return;
-
       if (target === resultRef.current || target === inputRef.current){
         return;
       }
+
+      
 
       setIsSearch(false);
     }
