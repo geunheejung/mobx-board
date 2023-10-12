@@ -227,6 +227,12 @@
       "title": "글이다!",
       "content": "으하핳\n",
       "user": "BOB"
+    },
+    {
+      "id": "76e795fd-c39c-47fa-85cc-ae9eb81eed06",
+      "title": "게시글 제목",
+      "content": "게시글 제목 입니닷",
+      "user": "BOB"
     }
   ]
 }

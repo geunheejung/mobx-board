@@ -5,6 +5,7 @@ import Spinner from "../Spinner";
 import {FETCH_STATE} from "../../api";
 import {PostStoreContext} from "../../index";
 import './PostList.css';
+import { useRouteMatch } from "react-router-dom";
 
 const PostList = observer(function PostList() {
   const rootStore = useContext(PostStoreContext);
